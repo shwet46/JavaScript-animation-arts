@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cherry Blossom Tree</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f0f8ff; 
+    }
+
+    h1{
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+    }
+
+    h3{
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        color: rgb(94, 94, 94); 
+    }
+
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div id="cherry-blossom-tree"></div>
+  <h1>Wishing you all good luck and health</h1>
+  <h3>made by SB 💗</h3>
+  <script>
+    let fallingBlossoms = [];
+    let branchBlossoms = []; 
+
+    function setup() {
+      const canvas = createCanvas(400, 400);
+      canvas.parent("cherry-blossom-tree");
+      frameRate(30); 
+      for (let i = 0; i < 100; i++) {
+        fallingBlossoms.push(createFallingBlossom());
+      }
+    }
+
+    function draw() {
+      background(240, 248, 255);
+
+      translate(width / 2, height); 
+      drawTree(120); 
+
+      for (let blossom of fallingBlossoms) {
+        updateFallingBlossom(blossom);
+        drawFallingBlossom(blossom);
+      }
+    }
+
+    function drawTree(len) {
+      stroke(101, 67, 33);
+      strokeWeight(map(len, 4, 100, 2, 30)); 
+      line(0, 0, 0, -len); 
+      translate(0, -len); 
+      if (len > 12) {
+        push();
+        rotate(PI / 6);
+        drawTree(len * 0.67);
+        pop();
+        push();
+        rotate(-PI / 6);
+        drawTree(len * 0.67);
+        pop();
+      } else {
+        if (!branchBlossoms[len]) {
+          branchBlossoms[len] = createStaticBlossoms(); 
+        }
+        drawStaticBlossoms(branchBlossoms[len]);
+      }
+    }
+
+    function createStaticBlossoms() {
+      let blossoms = [];
+      for (let i = 0; i < random(4, 18); i++) {
+        blossoms.push({
+          x: random(-5, 5),
+          y: random(-5, 5),
+          sizeX: random(6, 12),
+          sizeY: random(6, 12),
+          color: [
+            random(230, 255),
+            random(160, 200),
+            random(200, 240),
+            200
+          ]
+        });
+      }
+      return blossoms;
+    }
+
+    function drawStaticBlossoms(blossoms) {
+      noStroke();
+      for (let blossom of blossoms) {
+        fill(...blossom.color);
+        ellipse(blossom.x, blossom.y, blossom.sizeX, blossom.sizeY);
+      }
+    }
+
+    function createFallingBlossom() {
+      return {
+        x: random(width),
+        y: random(-height, height),
+        size: random(7, 10),
+        speed: random(0.2, 0.5), 
+        sway: random(1, 2), 
+        swayOffset: random(TWO_PI)
+      };
+    }
+
+    function updateFallingBlossom(blossom) {
+      blossom.y += blossom.speed; 
+      blossom.x += sin(blossom.swayOffset + frameCount * 0.02) * blossom.sway; 
+      if (blossom.y > height) { 
+        blossom.y = random(-50, 0); 
+        blossom.x = random(width);
+      }
+    }
+
+    function drawFallingBlossom(blossom) {
+      noStroke();
+      fill(255, 182, 193, 200); 
+      ellipse(blossom.x, blossom.y, blossom.size);
+    }
+  </script>
+</body>
+</html>

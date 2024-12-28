@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fractal Tree</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #000;
+      font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+      color: rgb(167, 178, 189);
+    }
+
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div id="fractal-tree"></div>
+  <h2>This is the very first thing which gave me inspiration to learn JS animations :)</h2>
+  <h3>I saw this on website of a random youtuber and decided to learn about animations !</h3>
+  <script>
+    let angle;
+
+    function setup() {
+      const canvas = createCanvas(400, 400);
+      canvas.parent("fractal-tree"); 
+      angle = PI / 4;
+      stroke(255);
+    }
+
+    function draw() {
+      clear();
+      translate(200, height);
+      angle = map(sin(frameCount * 0.01), -1, 1, PI / 2, PI / 16); 
+      branch(100);
+    }
+
+    function branch(len) {
+      line(0, 0, 0, -len);
+      translate(0, -len);
+      if (len > 4) {
+        push();
+        rotate(angle);
+        branch(len * 0.67);
+        pop();
+        push();
+        rotate(-angle);
+        branch(len * 0.67);
+        pop();
+      }
+    }
+  </script>
+</body>
+</html>
